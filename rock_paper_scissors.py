@@ -20,7 +20,6 @@ class RockPaperScissorsGame:
         self.player_score = 0
         self.computer_score = 0
         self.ties = 0
-        self.round_count = 0  # track number of rounds played
         self.choices = ["Rock", "Paper", "Scissors"]
         
         # Title
@@ -29,7 +28,7 @@ class RockPaperScissorsGame:
             text="Rock Paper Scissors",
             font=("Arial", 24, "bold"),
             bg="#f0f0f0",
-            fg="#333333"
+            fg="#333"
         )
         title_label.pack(pady=20)
         
@@ -78,27 +77,6 @@ class RockPaperScissorsGame:
             wraplength=400
         )
         self.result_label.pack(pady=10)
-        
-        # Detailed scoreboard (history of rounds)
-        scoreboard_frame = tk.Frame(self.root, bg="#f0f0f0")
-        scoreboard_frame.pack(pady=10, fill=tk.BOTH, expand=True)
-
-        columns = ("round", "player", "computer", "result")
-        self.scoreboard = ttk.Treeview(scoreboard_frame, columns=columns, show="headings", height=8)
-        self.scoreboard.heading("round", text="Round")
-        self.scoreboard.heading("player", text="Player Choice")
-        self.scoreboard.heading("computer", text="Computer Choice")
-        self.scoreboard.heading("result", text="Outcome")
-        self.scoreboard.column("round", width=60, anchor=tk.CENTER)
-        self.scoreboard.column("player", width=120, anchor=tk.CENTER)
-        self.scoreboard.column("computer", width=120, anchor=tk.CENTER)
-        self.scoreboard.column("result", width=100, anchor=tk.CENTER)
-        self.scoreboard.pack(fill=tk.BOTH, expand=True)
-
-        # scrollbar for scoreboard
-        scrollbar = ttk.Scrollbar(scoreboard_frame, orient=tk.VERTICAL, command=self.scoreboard.yview)
-        self.scoreboard.configure(yscroll=scrollbar.set)
-        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         
         # Buttons frame
         button_frame = tk.Frame(self.root, bg="#f0f0f0")
@@ -186,16 +164,6 @@ class RockPaperScissorsGame:
         self.score_label.config(
             text=f"Player: {self.player_score}  |  Ties: {self.ties}  |  Computer: {self.computer_score}"
         )
-
-        # insert entry into the detailed scoreboard
-        self.round_count += 1
-        outcome_text = "Tie" if result == "tie" else ("Win" if result == "win" else "Loss")
-        self.scoreboard.insert("", "end", values=(
-            self.round_count,
-            player_choice,
-            computer_choice,
-            outcome_text
-        ))
     
     def determine_winner(self, player, computer):
         if player == computer:
@@ -214,16 +182,12 @@ class RockPaperScissorsGame:
         self.player_score = 0
         self.computer_score = 0
         self.ties = 0
-        self.round_count = 0
         self.player_choice_label.config(text="Your Choice: -")
         self.computer_choice_label.config(text="Computer's Choice: -")
         self.result_label.config(text="")
         self.score_label.config(
             text=f"Player: {self.player_score}  |  Ties: {self.ties}  |  Computer: {self.computer_score}"
         )
-        # clear scoreboard history
-        for item in self.scoreboard.get_children():
-            self.scoreboard.delete(item)
 
 if __name__ == "__main__":
     root = tk.Tk()
